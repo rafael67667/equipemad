@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipemad • Ministério de Adolescentes (MAD - IEQ Jardim Graziela)</title>
+    <style>
+        /* ==================== VARIÁVEIS E RESET ==================== */
+        :root {
+            --bg-app: #050505;
+            --surface-1: #111111;
+            --surface-2: #181818;
+            --surface-3: #222222;
+            --border-subtle: rgba(255, 255, 255, 0.09);
+            --border-fire: rgba(255, 85, 0, 0.55);
+            --fire-1: #ff5500;
+            --fire-2: #ff7a00;
+            --fire-3: #ff9d00;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --text-dim: #737373;
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --radius-pill: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.45;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+
+        button, input, textarea, select {
+            font-family: inherit;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* ==================== SHELL MOBILE-FIRST ==================== */
+        .app-shell {
+            max-width: 440px;
+            width: 100%;
+            min-height: 100dvh;
+            margin: 0 auto;
+            background: radial-gradient(circle at top right, rgba(255, 85, 0, 0.11), transparent 45%), var(--bg-app);
+            border-left: 1px solid rgba(255, 255, 255, 0.04);
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 92px;
+        }
+
+        /* ==================== CABEÇALHO ==================== */
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 25;
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .brand-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .brand-tag {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--fire-2);
+            background: rgba(255, 85, 0, 0.14);
+            border: 1px solid rgba(255, 85, 0, 0.35);
+            padding: 2px 7px;
+            border-radius: var(--radius-pill);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pass-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-2);
+            border: 1px solid var(--border-fire);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--fire-3);
+        }
+
+        .profile-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 3px 9px 3px 3px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-2);
+            border: 1px solid var(--border-fire);
+            max-width: 150px;
+        }
+
+        .avatar-frame {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--surface-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1.5px solid var(--fire-2);
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-trigger-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ==================== ÁREA PRINCIPAL ==================== */
+        .main-view {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tab-panel {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tab-panel.active {
+            display: flex;
+        }
+
+        /* ==================== STREAK & SEMANA ==================== */
+        .hero-question-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .hero-question {
+            font-size: 25px;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .sub-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--fire-2);
+        }
+
+        .xp-chip {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--fire-3);
+            background: rgba(255, 122, 0, 0.12);
+            border: 1px solid rgba(255, 122, 0, 0.3);
+            padding: 3px 9px;
+            border-radius: var(--radius-pill);
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .day-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 7px;
+            padding: 4px 0;
+        }
+
+        .day-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+        }
+
+        .day-label.today {
+            color: var(--fire-2);
+        }
+
+        .day-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            background: var(--surface-1);
+            border: 1.5px solid rgba(255, 122, 0, 0.35);
+            color: var(--text-muted);
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .day-circle.checked {
+            background: linear-gradient(135deg, var(--fire-3), var(--fire-1));
+            border-color: var(--fire-3);
+            color: #090909;
+            box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: var(--surface-1);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+        }
+
+        .card-fire {
+            background: linear-gradient(165deg, rgba(255, 85, 0, 0.09), rgba(17, 17, 17, 0.98) 38%);
+            border: 1.5px solid var(--border-fire);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--fire-2);
+        }
+
+        .devo-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .devo-switcher {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .mini-icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .devo-title {
+            font-size: 25px;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-top: 8px;
+            color: var(--text-main);
+        }
+
+        .devo-verse {
+            font-size: 14px;
+            font-style: italic;
+            color: #f4f4f5;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .devo-ref {
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--fire-2);
+            margin-top: 12px;
+        }
+
+        .devo-version {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .btn-fire {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: var(--radius-pill);
+            background: linear-gradient(90deg, var(--fire-1), var(--fire-2), var(--fire-3));
+            color: #080808;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-dark {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-outline-fire {
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 85, 0, 0.12);
+            border: 1px solid rgba(255, 85, 0, 0.45);
+            color: var(--fire-3);
+            font-size: 11px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .devo-actions-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        /* ==================== ANOTAÇÃO & POSTAGENS ==================== */
+        .note-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            position: relative;
+        }
+
+        .note-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .note-author-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .note-author-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .note-badge {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--fire-2);
+            display: block;
+        }
+
+        .close-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--surface-2);
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .post-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .post-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .like-btn.active {
+            color: var(--fire-2);
+            font-weight: 800;
+        }
+
+        /* ==================== BOTÃO FLUTUANTE ==================== */
+        .fab-new-devo {
+            position: fixed;
+            bottom: 80px;
+            right: max(16px, calc(50% - 204px));
+            z-index: 22;
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(90deg, var(--fire-2), var(--fire-3));
+            color: #090909;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 8px 24px rgba(255, 122, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fab-new-devo.hidden {
+            display: none;
+        }
+
+        /* ==================== BARRA INFERIOR ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 440px;
+            background: rgba(10, 10, 10, 0.96);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 8px 6px 10px;
+            z-index: 24;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 4px 2px;
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .nav-item.active {
+            color: var(--fire-2);
+        }
+
+        .nav-icon {
+            font-size: 17px;
+            line-height: 1;
+        }
+
+        /* ==================== ELEMENTOS INTERNOS DE ABAS ==================== */
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+
+        .chip-btn {
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .chip-btn.active {
+            background: rgba(255, 85, 0, 0.18);
+            border-color: var(--fire-2);
+            color: var(--fire-3);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-3);
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--fire-1), var(--fire-2), var(--fire-3));
+            border-radius: var(--radius-pill);
+            transition: width 0.25s ease;
+        }
+
+        .tier-item {
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .tier-item.unlocked {
+            border-color: rgba(255, 122, 0, 0.45);
+        }
+
+        .input-field, .textarea-field, .select-field {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .input-field:focus, .textarea-field:focus, .select-field:focus {
+            outline: none;
+            border-color: var(--fire-2);
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .field-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+        }
+
+        /* ==================== MODAIS ==================== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-sheet {
+            width: 100%;
+            max-width: 420px;
+            max-height: 88dvh;
+            overflow-y: auto;
+            background: var(--surface-1);
+            border: 1px solid var(--border-fire);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+        }
+
+        .modal-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .modal-title {
+            font-size: 19px;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+
+        .studio-stage {
+            width: 116px;
+            height: 116px;
+            margin: 0 auto 14px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid var(--fire-2);
+            box-shadow: 0 8px 24px rgba(255, 85, 0, 0.35);
+            background: var(--surface-2);
+        }
+
+        .option-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .opt-pill {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-2);
+            border: 1px solid var(--border-subtle);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .opt-pill.selected {
+            background: linear-gradient(90deg, var(--fire-1), var(--fire-3));
+            color: #080808;
+            font-weight: 900;
+            border-color: var(--fire-3);
+        }
+
+        /* ==================== TOAST ==================== */
+        .toast {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-80px);
+            z-index: 60;
+            background: var(--surface-2);
+            border: 1px solid var(--fire-2);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.65);
+            transition: transform 0.25s ease;
+            max-width: 90vw;
+            text-align: center;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div class="app-shell">
+        <!-- 1. CABEÇALHO EQUIPEMAD -->
+        <header class="top-header">
+            <div class="brand-wrap">
+                <h1 class="brand-title">Equipemad</h1>
+                <span class="brand-tag">MAD</span>
+            </div>
+
+            <div class="header-actions">
+                <button type="button" class="pass-pill-btn" onclick="openModal('modal-pass')" title="Passe da Temporada MAD">
+                    <span>🔥</span>
+                    <span id="header-pass-label">Nv.1 • 0 XP</span>
+                </button>
+
+                <button type="button" class="profile-trigger" onclick="openProfileModal()" title="Perfil e Avatar MAD">
+                    <span id="header-avatar-box" class="avatar-frame"></span>
+                    <span id="header-profile-name" class="profile-trigger-name">Kimberlider</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-view">
+            <!-- ==================== ABA MURAL ==================== -->
+            <section id="panel-mural" class="tab-panel active">
+                <!-- 2. BLOCO JÁ CONVERSOU COM DEUS HOJE? + SEMANA + XP -->
+                <div>
+                    <div class="hero-question-row">
+                        <h2 class="hero-question">Já conversou com Deus hoje?</h2>
+                    </div>
+
+                    <div class="sub-meta-row">
+                        <div class="streak-badge">
+                            <span>🔥</span>
+                            <span id="streak-text">3 DIAS SEGUIDOS</span>
+                        </div>
+                        <button type="button" class="xp-chip" onclick="openModal('modal-pass')">
+                            Passe MAD • <span id="mural-level-badge">Nível 1</span>
+                        </button>
+                    </div>
+
+                    <div id="week-grid" class="week-grid" aria-label="Dias da semana"></div>
+                </div>
+
+                <!-- 3. CARD DEVOCIONAL DE HOJE -->
+                <article class="card-fire">
+                    <div class="devo-top-bar">
+                        <span class="eyebrow">DEVOCIONAL DE HOJE</span>
+                        <div class="devo-switcher">
+                            <button type="button" class="mini-icon-btn" onclick="cycleDevotional(-1)" title="Devocional anterior">‹</button>
+                            <span id="devo-index-label" style="font-size:11px;font-weight:800;color:var(--text-muted);padding:0 3px;">1/3</span>
+                            <button type="button" class="mini-icon-btn" onclick="cycleDevotional(1)" title="Próximo devocional">›</button>
+                        </div>
+                    </div>
+
+                    <h3 id="devo-card-title" class="devo-title">Não nos cansemos</h3>
+                    <p id="devo-card-verse" class="devo-verse">
+                        E não nos cansemos de fazer bem, porque a seu tempo ceifaremos, se não houvermos desfalecido.
+                    </p>
+                    <div id="devo-card-ref" class="devo-ref">GÁLATAS 6:9</div>
+                    <div id="devo-card-version" class="devo-version">Almeida Revista e Corrigida (1911)</div>
+
+                    <div class="devo-actions-row">
+                        <button type="button" id="btn-read-devo" class="btn-fire" onclick="openReadDevotionalModal()">
+                            LER DEVOCIONAL DE HOJE
+                        </button>
+                        <button type="button" class="btn-dark" onclick="openModal('modal-new-devo')" title="Criar novo devocional">
+                            + Novo devocional
+                        </button>
+                    </div>
+                </article>
+
+                <!-- 4. CARD DE ANOTAÇÃO DA EQUIPE -->
+                <div id="pinned-note-slot"></div>
+
+                <!-- FEED DE POSTAGENS E ANOTAÇÕES -->
+                <div class="section-head">
+                    <span class="eyebrow">MURAL DA EQUIPE MAD</span>
+                    <button type="button" class="btn-outline-fire" onclick="openModal('modal-new-post')">
+                        + Nova postagem
+                    </button>
+                </div>
+                <div id="mural-feed-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </section>
+
+            <!-- ==================== ABA AGENDA ==================== -->
+            <section id="panel-agenda" class="tab-panel">
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">IEQ JARDIM GRAZIELA</span>
+                        <h2 class="section-title">Agenda MAD</h2>
+                    </div>
+                    <button type="button" class="btn-outline-fire" onclick="openModal('modal-new-event')">
+                        + Evento
+                    </button>
+                </div>
+
+                <div id="agenda-filters" class="filter-row"></div>
+                <div id="agenda-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </section>
+
+            <!-- ==================== ABA EQUIPEMAD ==================== -->
+            <section id="panel-equipemad" class="tab-panel">
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">MINISTÉRIO DE ADOLESCENTES</span>
+                        <h2 class="section-title">Painel Equipemad</h2>
+                    </div>
+                    <button type="button" class="btn-outline-fire" onclick="openAvatarStudio()">
+                        🎨 Boneco MAD
+                    </button>
+                </div>
+
+                <!-- Resumo Passe da Temporada -->
+                <div class="card-fire">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <div>
+                            <span class="eyebrow">PASSE DA TEMPORADA MAD</span>
+                            <h3 id="panel-pass-level-title" style="font-size:18px;font-weight:900;margin-top:2px;">Nível 1 • Faísca MAD</h3>
+                        </div>
+                        <span id="panel-pass-xp-text" class="xp-chip">0 / 100 XP</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="panel-pass-bar" class="progress-fill"></div>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px;">
+                        <button type="button" class="btn-fire" style="padding:10px;" onclick="gainXp(25, 'Ação de equipe registrada!')">
+                            +25 XP Ação MAD
+                        </button>
+                        <button type="button" class="btn-dark" onclick="openModal('modal-pass')">
+                            Ver Passe
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Membros da Equipe -->
+                <div class="card">
+                    <div class="section-head" style="margin-bottom:10px;">
+                        <span class="eyebrow">MEMBROS & FUNÇÕES</span>
+                        <button type="button" class="btn-outline-fire" onclick="openProfileModal()">Editar meu perfil</button>
+                    </div>
+                    <div id="team-members-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+                </div>
+
+                <!-- Escalas & Presença -->
+                <div class="card">
+                    <span class="eyebrow">ESCALA DO CULTÃO MAD</span>
+                    <div id="scales-list" style="display:flex;flex-direction:column;gap:8px;margin-top:10px;"></div>
+                </div>
+            </section>
+
+            <!-- ==================== ABA PRAISEMAD ==================== -->
+            <section id="panel-praisemad" class="tab-panel">
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">LOUVOR & ADORAÇÃO</span>
+                        <h2 class="section-title">Praisemad</h2>
+                    </div>
+                    <button type="button" class="btn-outline-fire" onclick="openModal('modal-new-song')">
+                        + Música
+                    </button>
+                </div>
+
+                <input id="song-search-input" type="search" class="input-field" placeholder="Buscar louvor, tom ou ministro..." oninput="renderPraisemad()">
+                <div id="songs-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </section>
+        </main>
+
+        <!-- BOTÃO FLUTUANTE + NOVO DEVOCIONAL NO MURAL -->
+        <button type="button" id="fab-new-devo" class="fab-new-devo" onclick="openModal('modal-new-devo')">
+            <span>+</span>
+            <span>Novo devocional</span>
+        </button>
+
+        <!-- BARRA INFERIOR DE NAVEGAÇÃO -->
+        <nav class="bottom-nav" aria-label="Navegação principal">
+            <button type="button" id="nav-mural" class="nav-item active" onclick="switchTab('mural')">
+                <span class="nav-icon">📖</span>
+                <span>MURAL</span>
+            </button>
+            <button type="button" id="nav-agenda" class="nav-item" onclick="switchTab('agenda')">
+                <span class="nav-icon">📅</span>
+                <span>AGENDA</span>
+            </button>
+            <button type="button" id="nav-equipemad" class="nav-item" onclick="switchTab('equipemad')">
+                <span class="nav-icon">🔥</span>
+                <span>EQUIPEMAD</span>
+            </button>
+            <button type="button" id="nav-praisemad" class="nav-item" onclick="switchTab('praisemad')">
+                <span class="nav-icon">🎵</span>
+                <span>PRAISEMAD</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ==================== MODAIS ==================== -->
+
+    <!-- Modal Leitura do Devocional -->
+    <div id="modal-read-devo" class="modal-backdrop" onclick="backdropClose(event, 'modal-read-devo')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <span class="eyebrow">DEVOCIONAL • MAD IEQ JARDIM GRAZIELA</span>
+                <button type="button" class="close-btn" onclick="closeModal('modal-read-devo')">✕</button>
+            </div>
+            <h3 id="read-devo-title" class="modal-title" style="font-size:22px;"></h3>
+            <div id="read-devo-meta" class="devo-ref" style="margin-top:4px;"></div>
+            <p id="read-devo-verse" class="devo-verse" style="background:var(--surface-2);padding:12px;border-left:3px solid var(--fire-1);border-radius:0 10px 10px 0;"></p>
+            <div id="read-devo-body" style="margin-top:12px;font-size:13.5px;color:#e4e4e7;display:flex;flex-direction:column;gap:10px;"></div>
+            <div style="margin-top:14px;padding:12px;border-radius:12px;background:rgba(255,85,0,0.1);border:1px solid rgba(255,85,0,0.3);">
+                <div class="eyebrow" style="margin-bottom:4px;">Oração da Equipe</div>
+                <p id="read-devo-prayer" style="font-size:12.5px;font-style:italic;color:#f4f4f5;"></p>
+            </div>
+            <button type="button" class="btn-fire" style="margin-top:16px;" onclick="completeDevotionalReading()">
+                CONCLUIR LEITURA & GANHAR +35 XP 🔥
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Novo Devocional -->
+    <div id="modal-new-devo" class="modal-backdrop" onclick="backdropClose(event, 'modal-new-devo')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <h3 class="modal-title">Novo Devocional MAD</h3>
+                <button type="button" class="close-btn" onclick="closeModal('modal-new-devo')">✕</button>
+            </div>
+            <form onsubmit="handleCreateDevotional(event)">
+                <div class="field-group">
+                    <label class="field-label" for="new-devo-title">Título</label>
+                    <input id="new-devo-title" type="text" class="input-field" required placeholder="Ex: Chama que não apaga">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <div class="field-group">
+                        <label class="field-label" for="new-devo-ref">Referência</label>
+                        <input id="new-devo-ref" type="text" class="input-field" required placeholder="Ex: 2 TIMÓTEO 1:6">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="new-devo-version">Tradução</label>
+                        <input id="new-devo-version" type="text" class="input-field" value="Almeida Revista e Corrigida (1911)">
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="new-devo-verse">Versículo</label>
+                    <textarea id="new-devo-verse" rows="2" class="textarea-field" required placeholder="Texto bíblico..."></textarea>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="new-devo-body">Mensagem / Reflexão</label>
+                    <textarea id="new-devo-body" rows="3" class="textarea-field" required placeholder="Reflexão para os adolescentes e equipe..."></textarea>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="new-devo-prayer">Oração</label>
+                    <input id="new-devo-prayer" type="text" class="input-field" placeholder="Oração final do devocional...">
+                </div>
+                <button type="submit" class="btn-fire">SALVAR E ATIVAR DEVOCIONAL (+20 XP)</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Nova Postagem / Anotação -->
+    <div id="modal-new-post" class="modal-backdrop" onclick="backdropClose(event, 'modal-new-post')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <h3 class="modal-title">Nova Postagem no Mural</h3>
+                <button type="button" class="close-btn" onclick="closeModal('modal-new-post')">✕</button>
+            </div>
+            <form onsubmit="handleCreatePost(event)">
+                <div class="field-group">
+                    <label class="field-label" for="post-type-select">Tipo</label>
+                    <select id="post-type-select" class="select-field">
+                        <option value="ANOTAÇÃO">ANOTAÇÃO</option>
+                        <option value="TESTEMUNHO">TESTEMUNHO</option>
+                        <option value="AVISO MAD">AVISO MAD</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="post-verse-input">Versículo ou Tema</label>
+                    <input id="post-verse-input" type="text" class="input-field" value="GÁLATAS 6:9">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="post-content-input">Mensagem</label>
+                    <textarea id="post-content-input" rows="3" class="textarea-field" required placeholder="Compartilhe algo com a equipe MAD..."></textarea>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                    <input id="post-pin-check" type="checkbox">
+                    Fixar como anotação em destaque no topo
+                </label>
+                <button type="submit" class="btn-fire">PUBLICAR NO MURAL (+20 XP)</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Perfil e Personalização -->
+    <div id="modal-profile" class="modal-backdrop" onclick="backdropClose(event, 'modal-profile')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <div>
+                    <span class="eyebrow">PERFIL & IDENTIDADE</span>
+                    <h3 class="modal-title">Personalizar Perfil</h3>
+                </div>
+                <button type="button" class="close-btn" onclick="closeModal('modal-profile')">✕</button>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;background:var(--surface-2);padding:12px;border-radius:14px;border:1px solid var(--border-subtle);margin-bottom:14px;">
+                <div id="profile-modal-preview" class="avatar-frame" style="width:56px;height:56px;"></div>
+                <div style="min-width:0;flex:1;">
+                    <div id="profile-modal-name-preview" style="font-size:15px;font-weight:900;"></div>
+                    <div id="profile-modal-role-preview" style="font-size:12px;color:var(--fire-2);font-weight:700;"></div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+                <button type="button" class="btn-dark" onclick="closeModal('modal-profile'); openAvatarStudio();">
+                    🎨 Bonecos / Avatares
+                </button>
+                <button type="button" class="btn-dark" onclick="closeModal('modal-profile'); openModal('modal-pass');">
+                    🔥 Passe Temporada
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveProfile(event)">
+                <div class="field-group">
+                    <label class="field-label" for="profile-name-input">Seu Nome</label>
+                    <input id="profile-name-input" type="text" class="input-field" required oninput="refreshProfileModalPreview()">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="profile-role-input">Função / Cargo na Equipe MAD</label>
+                    <input id="profile-role-input" type="text" class="input-field" required oninput="refreshProfileModalPreview()">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Foto ou Boneco Ativo</label>
+                    <div class="option-pills" style="margin-bottom:8px;">
+                        <button type="button" id="mode-photo-btn" class="opt-pill" onclick="setProfileSourceMode('photo')">Imagem / Foto</button>
+                        <button type="button" id="mode-avatar-btn" class="opt-pill" onclick="setProfileSourceMode('avatar')">Boneco MAD</button>
+                    </div>
+                </div>
+
+                <div id="profile-photo-fields">
+                    <div class="field-group">
+                        <label class="field-label" for="profile-file-input">Enviar Imagem do Dispositivo</label>
+                        <input id="profile-file-input" type="file" accept="image/*" class="input-field" onchange="handleProfileFileChange(event)">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="profile-url-input">Ou URL da Imagem</label>
+                        <input id="profile-url-input" type="text" class="input-field" placeholder="https://..." oninput="handleProfileUrlChange(event)">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-fire">SALVAR PERFIL</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Criador de Bonecos / Avatares MAD -->
+    <div id="modal-avatar-studio" class="modal-backdrop" onclick="backdropClose(event, 'modal-avatar-studio')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <div>
+                    <span class="eyebrow">ESTÚDIO SVG INTERATIVO</span>
+                    <h3 class="modal-title">Criador de Bonecos MAD</h3>
+                </div>
+                <button type="button" class="close-btn" onclick="closeModal('modal-avatar-studio')">✕</button>
+            </div>
+
+            <div id="studio-stage" class="studio-stage"></div>
+            <div id="studio-controls" style="display:flex;flex-direction:column;gap:12px;"></div>
+
+            <button type="button" class="btn-fire" style="margin-top:16px;" onclick="saveAvatarAsProfile()">
+                USAR ESTE BONECOS NO PERFIL 🔥
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Passe da Temporada MAD -->
+    <div id="modal-pass" class="modal-backdrop" onclick="backdropClose(event, 'modal-pass')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <div>
+                    <span class="eyebrow">TEMPORADA CHAMA MAD</span>
+                    <h3 class="modal-title">Passe da Temporada MAD</h3>
+                </div>
+                <button type="button" class="close-btn" onclick="closeModal('modal-pass')">✕</button>
+            </div>
+
+            <div class="card" style="padding:14px;margin-bottom:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <strong id="modal-pass-level-name" style="font-size:15px;">Nível 1 • Faísca MAD</strong>
+                    <span id="modal-pass-xp-label" class="xp-chip">0 / 100 XP</span>
+                </div>
+                <div class="progress-track">
+                    <div id="modal-pass-bar" class="progress-fill"></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                    <button type="button" class="btn-outline-fire" onclick="gainXp(20, 'Oração pela equipe registrada!')">+20 XP Oração</button>
+                    <button type="button" class="btn-outline-fire" onclick="gainXp(30, 'Ensaio / Escala cumprida!')">+30 XP Ensaio</button>
+                    <button type="button" class="btn-outline-fire" onclick="gainXp(50, 'Impulso de chama MAD!')">+50 XP Bônus</button>
+                </div>
+            </div>
+
+            <div id="pass-tiers-container" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Evento -->
+    <div id="modal-new-event" class="modal-backdrop" onclick="backdropClose(event, 'modal-new-event')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <h3 class="modal-title">Novo Evento MAD</h3>
+                <button type="button" class="close-btn" onclick="closeModal('modal-new-event')">✕</button>
+            </div>
+            <form onsubmit="handleCreateEvent(event)">
+                <div class="field-group">
+                    <label class="field-label" for="event-title-input">Nome do Evento</label>
+                    <input id="event-title-input" type="text" class="input-field" required placeholder="Ex: Culto de Adolescentes">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <div class="field-group">
+                        <label class="field-label" for="event-date-input">Data</label>
+                        <input id="event-date-input" type="text" class="input-field" required placeholder="Ex: Sáb, 28 Nov">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="event-time-input">Horário</label>
+                        <input id="event-time-input" type="text" class="input-field" required value="19:30">
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="event-cat-select">Categoria</label>
+                    <select id="event-cat-select" class="select-field">
+                        <option value="CULTO">CULTO</option>
+                        <option value="ENSAIO">ENSAIO</option>
+                        <option value="CÉLULA">CÉLULA</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="event-loc-input">Local</label>
+                    <input id="event-loc-input" type="text" class="input-field" value="IEQ Jardim Graziela">
+                </div>
+                <button type="submit" class="btn-fire">ADICIONAR À AGENDA (+15 XP)</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Nova Música Praisemad -->
+    <div id="modal-new-song" class="modal-backdrop" onclick="backdropClose(event, 'modal-new-song')">
+        <div class="modal-sheet">
+            <div class="modal-top">
+                <h3 class="modal-title">Novo Louvor • Praisemad</h3>
+                <button type="button" class="close-btn" onclick="closeModal('modal-new-song')">✕</button>
+            </div>
+            <form onsubmit="handleCreateSong(event)">
+                <div class="field-group">
+                    <label class="field-label" for="song-title-input">Título da Música</label>
+                    <input id="song-title-input" type="text" class="input-field" required placeholder="Ex: Fogo em Teus Olhos">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <div class="field-group">
+                        <label class="field-label" for="song-key-input">Tom</label>
+                        <input id="song-key-input" type="text" class="input-field" required value="Em">
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="song-leader-input">Ministro / Equipe</label>
+                        <input id="song-leader-input" type="text" class="input-field" required value="Praisemad">
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="song-chords-input">Letra / Cifra / Observações</label>
+                    <textarea id="song-chords-input" rows="4" class="textarea-field" required placeholder="Escreva letra, acordes ou andamento..."></textarea>
+                </div>
+                <button type="submit" class="btn-fire">SALVAR NO PRAISEMAD (+15 XP)</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /* ==================== CONSTANTES E DADOS PADRÃO ==================== */
+        const STORAGE_KEY = 'equipemad_ieq_graziela_v3';
+
+        const AVATAR_CONFIG_OPTIONS = {
+            hair: [
+                { id: 'spiky', label: 'Topete MAD' },
+                { id: 'curls', label: 'Cachos' },
+                { id: 'bob', label: 'Franja' },
+                { id: 'mohawk', label: 'Crista Fogo' }
+            ],
+            expression: [
+                { id: 'smile', label: 'Sorriso' },
+                { id: 'hyped', label: 'Empolgado' },
+                { id: 'focused', label: 'Focado' }
+            ],
+            outfit: [
+                { id: 'tee', label: 'Camiseta MAD' },
+                { id: 'hoodie', label: 'Moletom Chama' },
+                { id: 'jacket', label: 'Jaqueta Praisemad' }
+            ],
+            accessory: [
+                { id: 'none', label: 'Nenhum' },
+                { id: 'headphones', label: 'Fone Louvor' },
+                { id: 'glasses', label: 'Óculos' },
+                { id: 'flame', label: 'Chama Real' }
+            ],
+            accent: [
+                { id: 'fire', label: 'Laranja MAD', c1: '#ff5500', c2: '#ff9d00' },
+                { id: 'ember', label: 'Brasa Viva', c1: '#e63900', c2: '#ff7a00' },
+                { id: 'gold', label: 'Ouro Chama', c1: '#ff7a00', c2: '#ffc400' }
+            ]
+        };
+
+        const PASS_REWARDS = [
+            { level: 1, xp: 0, title: 'Faísca MAD', reward: 'Selo Membro MAD', kind: 'badge', value: 'Membro MAD' },
+            { level: 2, xp: 100, title: 'Chama Viva', reward: 'Título Chama Viva MAD', kind: 'role', value: 'Chama Viva MAD • IEQ Jd. Graziela' },
+            { level: 3, xp: 220, title: 'Sentinela Graziela', reward: 'Título Sentinela MAD', kind: 'role', value: 'Sentinela MAD • IEQ Jd. Graziela' },
+            { level: 4, xp: 360, title: 'Líder em Chamas', reward: 'Título Líder em Chamas MAD', kind: 'role', value: 'Líder em Chamas • IEQ Jd. Graziela' }
+        ];
+
+        function createDefaultAvatarDataUrl() {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff5500"/><stop offset="100%" stop-color="#ff9d00"/></linearGradient></defs>
+                <rect width="120" height="120" rx="60" fill="#181818"/>
+                <circle cx="60" cy="60" r="54" fill="none" stroke="url(#g)" stroke-width="4"/>
+                <path d="M28 106 C32 82, 45 75, 60 75 C75 75, 88 82, 92 106 Z" fill="url(#g)"/>
+                <text x="60" y="96" text-anchor="middle" fill="#090909" font-size="12" font-weight="900" font-family="sans-serif">MAD</text>
+                <rect x="53" y="64" width="14" height="13" rx="5" fill="#f1c29b"/>
+                <ellipse cx="60" cy="52" rx="21" ry="23" fill="#ffcc99"/>
+                <circle cx="52" cy="51" r="3.5" fill="#111111"/>
+                <circle cx="68" cy="51" r="3.5" fill="#111111"/>
+                <path d="M51 61 Q60 68 69 61" fill="none" stroke="#111111" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M37 40 C42 20, 78 20, 83 40 C74 33, 46 33, 37 40 Z" fill="#111111"/>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
+
+        function getDefaultState() {
+            const fallbackImg = createDefaultAvatarDataUrl();
+            return {
+                activeTab: 'mural',
+                agendaFilter: 'TODOS',
+                profile: {
+                    name: 'Kimberlider',
+                    role: 'Líder MAD • IEQ Jd. Graziela',
+                    photoMode: 'photo',
+                    photoUrl: fallbackImg,
+                    avatar: {
+                        hair: 'curls',
+                        expression: 'smile',
+                        outfit: 'tee',
+                        accessory: 'none',
+                        accent: 'fire'
+                    }
+                },
+                pass: {
+                    xp: 45,
+                    claimed: [1]
+                },
+                weekDays: [
+                    { label: 'DOM', num: '15', checked: true },
+                    { label: 'SEG', num: '16', checked: false },
+                    { label: 'TER', num: '17', checked: true },
+                    { label: 'QUA', num: '18', checked: true },
+                    { label: 'QUI', num: '19', checked: false },
+                    { label: 'SEX', num: '20', checked: false },
+                    { label: 'SÁB', num: '21', checked: false }
+                ],
+                devotionalRead: false,
+                activeDevoIdx: 0,
+                devotionals: [
+                    {
+                        title: 'Não nos cansemos',
+                        verse: 'E não nos cansemos de fazer bem, porque a seu tempo ceifaremos, se não houvermos desfalecido.',
+                        ref: 'GÁLATAS 6:9',
+                        version: 'Almeida Revista e Corrigida (1911)',
+                        body: [
+                            'Servir na equipe MAD na IEQ Jardim Graziela pede constância, amor e fogo do Espírito. Mesmo quando o cansaço aparece nos ensaios, na recepção ou nas conversas com os adolescentes, a promessa continua firme.',
+                            'A colheita vem no tempo certo de Deus para aqueles que não desistem no meio do caminho.'
+                        ],
+                        prayer: 'Senhor, renova nossas forças e mantém a chama do MAD acesa em cada coração hoje. Amém!'
+                    },
+                    {
+                        title: 'Chama que não se apaga',
+                        verse: 'Por este motivo, lembro-te que despertes o dom de Deus que existe em ti...',
+                        ref: '2 TIMÓTEO 1:6',
+                        version: 'Almeida Revista e Corrigida (1911)',
+                        body: [
+                            'O chamado de Deus precisa ser alimentado diariamente em oração e na Palavra.',
+                            'Quando a equipe busca a Deus juntos, o ambiente de louvor e acolhimento transforma vidas.'
+                        ],
+                        prayer: 'Pai, acende novamente o fogo do primeiro amor na nossa equipe MAD. Amém!'
+                    },
+                    {
+                        title: 'Exemplo na juventude',
+                        verse: 'Ninguém despreze a tua mocidade; mas sê um exemplo para os fiéis...',
+                        ref: '1 TIMÓTEO 4:12',
+                        version: 'Almeida Revista e Corrigida (1911)',
+                        body: [
+                            'Ser adolescente ou líder da equipe MAD é viver com propósito todos os dias.',
+                            'Nossas atitudes falam alto para cada adolescente que chega à igreja.'
+                        ],
+                        prayer: 'Espírito Santo, faz de nós exemplo de fé, amor e pureza. Amém!'
+                    }
+                ],
+                pinnedNote: {
+                    visible: true,
+                    author: 'Kimberlider',
+                    badge: 'ANOTAÇÃO',
+                    verse: 'GÁLATAS 6:9',
+                    text: 'Nossaaaa veio muito de encontro com meu testemunho sobre perseverar com a equipe MAD e os adolescentes!'
+                },
+                posts: [
+                    {
+                        id: 1,
+                        author: 'Lucas Praisemad',
+                        badge: 'LOUVOR MAD',
+                        verse: 'SALMOS 150:6',
+                        content: 'Ensaio do Praisemad foi abençoado demais! Que sábado o altar da IEQ Jardim Graziela queime com a presença de Deus.',
+                        likes: 11,
+                        liked: false,
+                        time: 'Hoje'
+                    }
+                ],
+                events: [
+                    { id: 1, title: 'Culto MAD • Chama Viva', date: 'Sáb, 21 Nov', time: '19:30', category: 'CULTO', location: 'IEQ Jardim Graziela', confirmed: true, attendees: 26 },
+                    { id: 2, title: 'Ensaio Geral Praisemad', date: 'Sex, 20 Nov', time: '20:00', category: 'ENSAIO', location: 'Templo MAD', confirmed: true, attendees: 8 },
+                    { id: 3, title: 'Célula de Adolescentes', date: 'Qua, 25 Nov', time: '19:45', category: 'CÉLULA', location: 'IEQ Jardim Graziela', confirmed: false, attendees: 15 }
+                ],
+                teamMembers: [
+                    { name: 'Kimberlider', role: 'Líder Geral MAD', streak: 12 },
+                    { name: 'Lucas Silva', role: 'Líder Praisemad', streak: 8 },
+                    { name: 'Bia Oliveira', role: 'Acolhimento & Vocal', streak: 7 },
+                    { name: 'Gabriel Costa', role: 'Mídia & Som MAD', streak: 5 }
+                ],
+                scales: [
+                    { role: 'Direção & Palavra', member: 'Kimberlider', status: 'Confirmado' },
+                    { role: 'Louvor (Praisemad)', member: 'Lucas & Bia', status: 'Confirmado' },
+                    { role: 'Mídia & Iluminação', member: 'Gabriel Costa', status: 'Confirmado' },
+                    { role: 'Recepção MAD', member: 'Equipe de Apoio', status: '19:00' }
+                ],
+                songs: [
+                    { id: 1, title: 'Fogo em Teus Olhos', key: 'Em', leader: 'Lucas • Praisemad', notes: 'Intro: Em7 | C9 | G | D — Mantém dinâmica crescente no refrão.' },
+                    { id: 2, title: 'Queima de Novo', key: 'G', leader: 'Bia • Praisemad', notes: 'Intro: G | D/F# | Em7 | C9 — Momento de clamor e entrega da equipe.' },
+                    { id: 3, title: 'Ruja o Leão', key: 'Am', leader: 'Praisemad', notes: 'Intro: Am7 | F | C | G — Forte para encerramento do culto MAD.' }
+                ]
+            };
+        }
+
+        /* ==================== ESTADO E ARMAZENAMENTO SEGURO ==================== */
+        let state = loadSafeState();
+        let tempAvatar = cloneObj(state.profile.avatar);
+        let tempProfileMode = state.profile.photoMode;
+        let tempProfilePhotoUrl = state.profile.photoUrl;
+
+        function cloneObj(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        }
+
+        function loadSafeState() {
+            const fallback = getDefaultState();
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return fallback;
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return fallback;
+
+                return {
+                    ...fallback,
+                    ...parsed,
+                    profile: {
+                        ...fallback.profile,
+                        ...(parsed.profile || {}),
+                        avatar: {
+                            ...fallback.profile.avatar,
+                            ...((parsed.profile && parsed.profile.avatar) || {})
+                        }
+                    },
+                    pass: {
+                        ...fallback.pass,
+                        ...(parsed.pass || {})
+                    },
+                    pinnedNote: {
+                        ...fallback.pinnedNote,
+                        ...(parsed.pinnedNote || {})
+                    },
+                    devotionals: Array.isArray(parsed.devotionals) && parsed.devotionals.length > 0 ? parsed.devotionals : fallback.devotionals,
+                    weekDays: Array.isArray(parsed.weekDays) && parsed.weekDays.length === 7 ? parsed.weekDays : fallback.weekDays,
+                    posts: Array.isArray(parsed.posts) ? parsed.posts : fallback.posts,
+                    events: Array.isArray(parsed.events) ? parsed.events : fallback.events,
+                    teamMembers: Array.isArray(parsed.teamMembers) ? parsed.teamMembers : fallback.teamMembers,
+                    scales: Array.isArray(parsed.scales) ? parsed.scales : fallback.scales,
+                    songs: Array.isArray(parsed.songs) ? parsed.songs : fallback.songs
+                };
+            } catch (err) {
+                return fallback;
+            }
+        }
+
+        function saveSafeState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (err) {
+                showToast('Aviso: não foi possível salvar localmente.');
+            }
+        }
+
+        /* ==================== TOAST E MODAIS ==================== */
+        let toastTimeout = null;
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                el.classList.remove('show');
+            }, 2500);
+        }
+
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('open');
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('open');
+        }
+
+        function backdropClose(event, id) {
+            if (event.target && event.target.id === id) {
+                closeModal(id);
+            }
+        }
+
+        /* ==================== BONECOS / AVATARES SVG ==================== */
+        function buildAvatarSvgMarkup(cfg) {
+            const acc = AVATAR_CONFIG_OPTIONS.accent.find(a => a.id === cfg.accent) || AVATAR_CONFIG_OPTIONS.accent[0];
+
+            const hairMap = {
+                spiky: `<path d="M26 38 L31 16 L43 29 L50 12 L59 29 L74 17 L74 38 Z" fill="#141416" stroke="${acc.c2}" stroke-width="1.5"/>`,
+                curls: `<circle cx="32" cy="30" r="10" fill="#141416"/><circle cx="45" cy="23" r="11" fill="#141416"/><circle cx="58" cy="23" r="11" fill="#141416"/><circle cx="69" cy="30" r="10" fill="#141416"/>`,
+                bob: `<path d="M26 48 C26 22, 74 22, 74 48 L72 54 L28 54 Z" fill="#141416"/>`,
+                mohawk: `<path d="M44 9 L50 25 L56 9 L55 34 L45 34 Z" fill="${acc.c1}"/>`
+            };
+
+            const eyesMap = cfg.expression === 'focused'
+                ? `<line x1="37" y1="46" x2="45" y2="47" stroke="#111111" stroke-width="3" stroke-linecap="round"/><line x1="55" y1="47" x2="63" y2="46" stroke="#111111" stroke-width="3" stroke-linecap="round"/>`
+                : `<circle cx="41" cy="46" r="3.4" fill="#111111"/><circle cx="59" cy="46" r="3.4" fill="#111111"/><circle cx="42.2" cy="44.8" r="1.1" fill="#ffffff"/><circle cx="60.2" cy="44.8" r="1.1" fill="#ffffff"/>`;
+
+            const mouthMap = cfg.expression === 'hyped'
+                ? `<path d="M42 55 Q50 65 58 55 Z" fill="${acc.c1}" stroke="#111111" stroke-width="1.8"/>`
+                : `<path d="M42 55 Q50 61 58 55" fill="none" stroke="#111111" stroke-width="2.6" stroke-linecap="round"/>`;
+
+            const outfitMap = cfg.outfit === 'hoodie'
+                ? `<path d="M22 95 C24 72, 36 66, 50 66 C64 66, 76 72, 78 95 Z" fill="${acc.c1}"/><path d="M39 66 L50 78 L61 66" fill="none" stroke="#090909" stroke-width="2.5"/>`
+                : cfg.outfit === 'jacket'
+                ? `<path d="M20 95 C23 70, 36 65, 50 65 C64 65, 77 70, 80 95 Z" fill="#181818" stroke="${acc.c2}" stroke-width="2.5"/><line x1="50" y1="65" x2="50" y2="95" stroke="${acc.c2}" stroke-width="2"/>`
+                : `<path d="M24 95 C26 73, 37 67, 50 67 C63 67, 74 73, 76 95 Z" fill="#111111" stroke="${acc.c1}" stroke-width="2"/><text x="50" y="85" text-anchor="middle" fill="${acc.c2}" font-size="9.5" font-weight="900" font-family="sans-serif">MAD</text>`;
+
+            const accessoryMap = cfg.accessory === 'headphones'
+                ? `<path d="M24 47 C24 23, 76 23, 76 47" fill="none" stroke="${acc.c2}" stroke-width="4"/><rect x="19" y="43" width="8" height="14" rx="3" fill="${acc.c1}"/><rect x="73" y="43" width="8" height="14" rx="3" fill="${acc.c1}"/>`
+                : cfg.accessory === 'glasses'
+                ? `<rect x="34" y="41" width="13" height="9" rx="2" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="2"/><rect x="53" y="41" width="13" height="9" rx="2" fill="rgba(255,255,255,0.22)" stroke="#ffffff" stroke-width="2"/><line x1="47" y1="45" x2="53" y2="45" stroke="#ffffff" stroke-width="2"/>`
+                : cfg.accessory === 'flame'
+                ? `<path d="M50 3 C55 9, 57 13, 50 18 C43 13, 45 9, 50 3 Z" fill="${acc.c2}"/>`
+                : '';
+
+            return `<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="madBgGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="${acc.c1}" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#0b0b0b"/>
+                    </linearGradient>
+                </defs>
+                <rect width="100" height="100" fill="url(#madBgGrad)"/>
+                ${outfitMap}
+                <rect x="44" y="59" width="12" height="11" rx="4" fill="#f1c29b"/>
+                <ellipse cx="50" cy="47" rx="18" ry="20" fill="#ffcc99"/>
+                ${eyesMap}
+                ${mouthMap}
+                ${hairMap}
+                ${accessoryMap}
+            </svg>`;
+        }
+
+        function getActiveProfileAvatarHtml() {
+            if (state.profile.photoMode === 'avatar') {
+                return buildAvatarSvgMarkup(state.profile.avatar);
+            }
+            const safeUrl = state.profile.photoUrl || createDefaultAvatarDataUrl();
+            return `<img src="${escapeAttr(safeUrl)}" alt="${escapeAttr(state.profile.name)}" onerror="this.src='${createDefaultAvatarDataUrl()}'">`;
+        }
+
+        function escapeAttr(val) {
+            return String(val || '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+        }
+
+        function renderHeaderAndProfile() {
+            const box = document.getElementById('header-avatar-box');
+            const nameEl = document.getElementById('header-profile-name');
+            if (box) box.innerHTML = getActiveProfileAvatarHtml();
+            if (nameEl) nameEl.textContent = state.profile.name || 'Membro MAD';
+            if (state.pinnedNote && state.pinnedNote.author === 'Kimberlider' && state.profile.name !== 'Kimberlider') {
+                // Mantém o nome exibido sincronizado quando o usuário altera seu próprio nome
+            }
+        }
+
+        /* ==================== ESTÚDIO DE BONECOS ==================== */
+        function openAvatarStudio() {
+            tempAvatar = cloneObj(state.profile.avatar);
+            renderAvatarStudio();
+            openModal('modal-avatar-studio');
+        }
+
+        function renderAvatarStudio() {
+            const stage = document.getElementById('studio-stage');
+            const controls = document.getElementById('studio-controls');
+            if (stage) stage.innerHTML = buildAvatarSvgMarkup(tempAvatar);
+            if (!controls) return;
+
+            const groups = [
+                { key: 'hair', title: 'Cabelo / Estilo', opts: AVATAR_CONFIG_OPTIONS.hair },
+                { key: 'expression', title: 'Expressão', opts: AVATAR_CONFIG_OPTIONS.expression },
+                { key: 'outfit', title: 'Roupa / Camiseta MAD', opts: AVATAR_CONFIG_OPTIONS.outfit },
+                { key: 'accessory', title: 'Acessório / Chama', opts: AVATAR_CONFIG_OPTIONS.accessory },
+                { key: 'accent', title: 'Cor de Destaque', opts: AVATAR_CONFIG_OPTIONS.accent }
+            ];
+
+            controls.innerHTML = groups.map(grp => `
+                <div>
+                    <div class="field-label" style="margin-bottom:6px;">${grp.title}</div>
+                    <div class="option-pills">
+                        ${grp.opts.map(opt => `
+                            <button type="button" class="opt-pill ${tempAvatar[grp.key] === opt.id ? 'selected' : ''}"
+                                onclick="selectAvatarOption('${grp.key}', '${opt.id}')">
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectAvatarOption(key, value) {
+            tempAvatar[key] = value;
+            renderAvatarStudio();
+        }
+
+        function saveAvatarAsProfile() {
+            state.profile.avatar = cloneObj(tempAvatar);
+            state.profile.photoMode = 'avatar';
+            saveSafeState();
+            renderHeaderAndProfile();
+            renderMuralFeed();
+            closeModal('modal-avatar-studio');
+            gainXp(15, 'Boneco MAD equipado no perfil!');
+        }
+
+        /* ==================== MODAL DE PERFIL ==================== */
+        function openProfileModal() {
+            tempProfileMode = state.profile.photoMode;
+            tempProfilePhotoUrl = state.profile.photoUrl;
+            document.getElementById('profile-name-input').value = state.profile.name;
+            document.getElementById('profile-role-input').value = state.profile.role;
+            document.getElementById('profile-url-input').value = state.profile.photoUrl.startsWith('data:') ? '' : state.profile.photoUrl;
+            refreshProfileModalPreview();
+            openModal('modal-profile');
+        }
+
+        function setProfileSourceMode(mode) {
+            tempProfileMode = mode;
+            refreshProfileModalPreview();
+        }
+
+        function handleProfileFileChange(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (e.target && typeof e.target.result === 'string') {
+                    tempProfilePhotoUrl = e.target.result;
+                    tempProfileMode = 'photo';
+                    refreshProfileModalPreview();
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleProfileUrlChange(event) {
+            const val = event.target.value.trim();
+            if (val) {
+                tempProfilePhotoUrl = val;
+                tempProfileMode = 'photo';
+                refreshProfileModalPreview();
+            }
+        }
+
+        function refreshProfileModalPreview() {
+            const nameVal = (document.getElementById('profile-name-input').value || '').trim() || 'Membro MAD';
+            const roleVal = (document.getElementById('profile-role-input').value || '').trim() || 'Equipe MAD';
+
+            document.getElementById('profile-modal-name-preview').textContent = nameVal;
+            document.getElementById('profile-modal-role-preview').textContent = roleVal;
+
+            const prevBox = document.getElementById('profile-modal-preview');
+            if (tempProfileMode === 'avatar') {
+                prevBox.innerHTML = buildAvatarSvgMarkup(state.profile.avatar);
+            } else {
+                const src = tempProfilePhotoUrl || createDefaultAvatarDataUrl();
+                prevBox.innerHTML = `<img src="${escapeAttr(src)}" alt="Preview" onerror="this.src='${createDefaultAvatarDataUrl()}'">`;
+            }
+
+            document.getElementById('mode-photo-btn').classList.toggle('selected', tempProfileMode === 'photo');
+            document.getElementById('mode-avatar-btn').classList.toggle('selected', tempProfileMode === 'avatar');
+            document.getElementById('profile-photo-fields').style.display = tempProfileMode === 'photo' ? 'block' : 'none';
+        }
+
+        function handleSaveProfile(event) {
+            event.preventDefault();
+            const name = document.getElementById('profile-name-input').value.trim();
+            const role = document.getElementById('profile-role-input').value.trim();
+            if (!name) return;
+
+            state.profile.name = name;
+            state.profile.role = role || 'Equipe MAD • IEQ Jd. Graziela';
+            state.profile.photoMode = tempProfileMode;
+            if (tempProfilePhotoUrl) {
+                state.profile.photoUrl = tempProfilePhotoUrl;
+            }
+
+            saveSafeState();
+            renderHeaderAndProfile();
+            renderEquipemad();
+            renderMuralFeed();
+            closeModal('modal-profile');
+            showToast('Perfil MAD salvo com sucesso!');
+        }
+
+        /* ==================== PASSE DA TEMPORADA MAD ==================== */
+        function getPassMetrics(xp) {
+            let current = PASS_REWARDS[0];
+            let next = null;
+            for (let i = 0; i < PASS_REWARDS.length; i++) {
+                if (xp >= PASS_REWARDS[i].xp) {
+                    current = PASS_REWARDS[i];
+                    next = PASS_REWARDS[i + 1] || null;
+                }
+            }
+            if (!next) {
+                return { current, next: null, pct: 100, label: `${xp} XP • Nível Máximo` };
+            }
+            const span = Math.max(1, next.xp - current.xp);
+            const pct = Math.max(0, Math.min(100, Math.round(((xp - current.xp) / span) * 100)));
+            return { current, next, pct, label: `${xp} / ${next.xp} XP` };
+        }
+
+        function gainXp(amount, reason) {
+            state.pass.xp = Math.max(0, (state.pass.xp || 0) + amount);
+            saveSafeState();
+            renderPassEverywhere();
+            showToast(`🔥 +${amount} XP${reason ? ' • ' + reason : ''}`);
+        }
+
+        function claimPassLevel(level) {
+            const tier = PASS_REWARDS.find(t => t.level === level);
+            if (!tier || state.pass.xp < tier.xp) return;
+            if (!state.pass.claimed.includes(level)) {
+                state.pass.claimed.push(level);
+            }
+            if (tier.kind === 'role') {
+                state.profile.role = tier.value;
+            }
+            saveSafeState();
+            renderHeaderAndProfile();
+            renderPassEverywhere();
+            showToast(`🎁 Recompensa "${tier.title}" resgatada!`);
+        }
+
+        function renderPassEverywhere() {
+            const m = getPassMetrics(state.pass.xp);
+            document.getElementById('header-pass-label').textContent = `Nv.${m.current.level} • ${state.pass.xp} XP`;
+            document.getElementById('mural-level-badge').textContent = `Nível ${m.current.level} • ${m.current.title}`;
+
+            document.getElementById('panel-pass-level-title').textContent = `Nível ${m.current.level} • ${m.current.title}`;
+            document.getElementById('panel-pass-xp-text').textContent = m.label;
+            document.getElementById('panel-pass-bar').style.width = `${m.pct}%`;
+
+            document.getElementById('modal-pass-level-name').textContent = `Nível ${m.current.level} • ${m.current.title}`;
+            document.getElementById('modal-pass-xp-label').textContent = m.label;
+            document.getElementById('modal-pass-bar').style.width = `${m.pct}%`;
+
+            const tiersEl = document.getElementById('pass-tiers-container');
+            if (tiersEl) {
+                tiersEl.innerHTML = PASS_REWARDS.map(tier => {
+                    const unlocked = state.pass.xp >= tier.xp;
+                    const claimed = state.pass.claimed.includes(tier.level);
+                    let actionHtml = `<span style="font-size:10px;font-weight:800;color:var(--text-dim);">BLOQUEADO</span>`;
+                    if (claimed) {
+                        actionHtml = `<span style="font-size:10px;font-weight:800;color:var(--fire-3);">RESGATADO ✓</span>`;
+                    } else if (unlocked) {
+                        actionHtml = `<button type="button" class="btn-outline-fire" onclick="claimPassLevel(${tier.level})">Resgatar</button>`;
+                    }
+                    return `
+                        <div class="tier-item ${unlocked ? 'unlocked' : ''}">
+                            <div>
+                                <div style="font-size:12px;font-weight:900;">Nv.${tier.level} • ${tier.title} <span style="color:var(--fire-2);">(${tier.xp} XP)</span></div>
+                                <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${tier.reward}</div>
+                            </div>
+                            ${actionHtml}
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        /* ==================== SEMANA, DEVOCIONAL E MURAL ==================== */
+        function renderWeekAndStreak() {
+            const grid = document.getElementById('week-grid');
+            if (!grid) return;
+
+            const checkedCount = state.weekDays.filter(d => d.checked).length;
+            const streakNum = checkedCount >= 3 ? checkedCount : 3;
+            document.getElementById('streak-text').textContent = `${streakNum} DIAS SEGUIDOS`;
+
+            grid.innerHTML = state.weekDays.map((day, idx) => {
+                const isToday = day.label === 'QUI';
+                return `
+                    <button type="button" class="day-btn" onclick="toggleDayCheck(${idx})">
+                        <span class="day-label ${isToday ? 'today' : ''}">${day.label}</span>
+                        <span class="day-circle ${day.checked ? 'checked' : ''}">
+                            ${day.checked ? '✓' : day.num}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+
+            const readBtn = document.getElementById('btn-read-devo');
+            if (readBtn) {
+                readBtn.textContent = state.devotionalRead ? 'DEVOCIONAL CONCLUÍDO ✓ (+35 XP)' : 'LER DEVOCIONAL DE HOJE';
+            }
+        }
+
+        function toggleDayCheck(idx) {
+            const target = state.weekDays[idx];
+            if (!target) return;
+            const turningOn = !target.checked;
+            target.checked = turningOn;
+            saveSafeState();
+            renderWeekAndStreak();
+            if (turningOn) {
+                gainXp(15, `Dia ${target.label} marcado!`);
+            } else {
+                showToast(`Marcação de ${target.label} removida.`);
+            }
+        }
+
+        function getCurrentDevotional() {
+            const total = state.devotionals.length;
+            const idx = ((state.activeDevoIdx % total) + total) % total;
+            state.activeDevoIdx = idx;
+            return state.devotionals[idx];
+        }
+
+        function renderDevotionalCard() {
+            const devo = getCurrentDevotional();
+            document.getElementById('devo-card-title').textContent = devo.title;
+            document.getElementById('devo-card-verse').textContent = devo.verse;
+            document.getElementById('devo-card-ref').textContent = devo.ref;
+            document.getElementById('devo-card-version').textContent = devo.version;
+            document.getElementById('devo-index-label').textContent = `${state.activeDevoIdx + 1}/${state.devotionals.length}`;
+        }
+
+        function cycleDevotional(delta) {
+            state.activeDevoIdx = (state.activeDevoIdx + delta + state.devotionals.length) % state.devotionals.length;
+            saveSafeState();
+            renderDevotionalCard();
+        }
+
+        function openReadDevotionalModal() {
+            const devo = getCurrentDevotional();
+            document.getElementById('read-devo-title').textContent = devo.title;
+            document.getElementById('read-devo-meta').textContent = `${devo.ref} • ${devo.version}`;
+            document.getElementById('read-devo-verse').textContent = `"${devo.verse}"`;
+            const paragraphs = Array.isArray(devo.body) ? devo.body : [devo.body];
+            document.getElementById('read-devo-body').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+            document.getElementById('read-devo-prayer').textContent = devo.prayer || 'Senhor, fala conosco hoje. Amém!';
+            openModal('modal-read-devo');
+        }
+
+        function completeDevotionalReading() {
+            const firstTime = !state.devotionalRead;
+            state.devotionalRead = true;
+            const qui = state.weekDays.find(d => d.label === 'QUI');
+            if (qui) qui.checked = true;
+            saveSafeState();
+            renderWeekAndStreak();
+            closeModal('modal-read-devo');
+            if (firstTime) {
+                gainXp(35, 'Devocional de hoje concluído!');
+            } else {
+                showToast('Devocional concluído! Chama mantida 🔥');
+            }
+        }
+
+        function handleCreateDevotional(event) {
+            event.preventDefault();
+            const title = document.getElementById('new-devo-title').value.trim();
+            const ref = document.getElementById('new-devo-ref').value.trim().toUpperCase();
+            const version = document.getElementById('new-devo-version').value.trim() || 'Almeida Revista e Corrigida (1911)';
+            const verse = document.getElementById('new-devo-verse').value.trim();
+            const bodyRaw = document.getElementById('new-devo-body').value.trim();
+            const prayer = document.getElementById('new-devo-prayer').value.trim();
+
+            if (!title || !ref || !verse || !bodyRaw) return;
+
+            state.devotionals.unshift({
+                title,
+                ref,
+                version,
+                verse,
+                body: bodyRaw.split('\n').map(s => s.trim()).filter(Boolean),
+                prayer: prayer || 'Senhor, mantém nossa chama acesa no MAD. Amém!'
+            });
+            state.activeDevoIdx = 0;
+            saveSafeState();
+            renderDevotionalCard();
+            closeModal('modal-new-devo');
+            event.target.reset();
+            gainXp(20, 'Novo devocional criado!');
+        }
+
+        function renderPinnedNoteAndFeed() {
+            const pinSlot = document.getElementById('pinned-note-slot');
+            if (pinSlot) {
+                if (state.pinnedNote && state.pinnedNote.visible) {
+                    pinSlot.innerHTML = `
+                        <article class="note-card">
+                            <div class="note-header">
+                                <div class="note-author-wrap">
+                                    <span class="avatar-frame">${getActiveProfileAvatarHtml()}</span>
+                                    <div>
+                                        <span class="note-author-name">${escapeAttr(state.profile.name)}</span>
+                                        <span class="note-badge">${escapeAttr(state.pinnedNote.badge || 'ANOTAÇÃO')}</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="close-btn" onclick="dismissPinnedNote()" title="Fechar anotação">✕</button>
+                            </div>
+                            <div class="devo-ref" style="margin-top:10px;">${escapeAttr(state.pinnedNote.verse)}</div>
+                            <p style="font-size:13.5px;color:#e4e4e7;margin-top:6px;">${escapeAttr(state.pinnedNote.text)}</p>
+                        </article>
+                    `;
+                } else {
+                    pinSlot.innerHTML = `
+                        <div style="display:flex;justify-content:flex-end;">
+                            <button type="button" class="btn-outline-fire" onclick="restorePinnedNote()">Mostrar anotação da equipe</button>
+                        </div>
+                    `;
+                }
+            }
+            renderMuralFeed();
+        }
+
+        function dismissPinnedNote() {
+            state.pinnedNote.visible = false;
+            saveSafeState();
+            renderPinnedNoteAndFeed();
+            showToast('Anotação ocultada.');
+        }
+
+        function restorePinnedNote() {
+            state.pinnedNote.visible = true;
+            saveSafeState();
+            renderPinnedNoteAndFeed();
+        }
+
+        function renderMuralFeed() {
+            const list = document.getElementById('mural-feed-list');
+            if (!list) return;
+            if (state.posts.length === 0) {
+                list.innerHTML = `<div class="card" style="text-align:center;color:var(--text-muted);font-size:12.5px;">Nenhuma postagem ainda. Clique em "+ Nova postagem" para compartilhar com a equipe MAD.</div>`;
+                return;
+            }
+            list.innerHTML = state.posts.map(p => `
+                <article class="post-card">
+                    <div class="note-header">
+                        <div>
+                            <strong style="font-size:13.5px;">${escapeAttr(p.author)}</strong>
+                            <span class="note-badge">${escapeAttr(p.badge)} • ${escapeAttr(p.time)}</span>
+                        </div>
+                        <span class="eyebrow">${escapeAttr(p.verse || '')}</span>
+                    </div>
+                    <p style="font-size:13.5px;color:#e4e4e7;">${escapeAttr(p.content)}</p>
+                    <div class="post-footer">
+                        <button type="button" class="like-btn ${p.liked ? 'active' : ''}" onclick="togglePostLike(${p.id})">
+                            🔥 ${p.likes} Amém
+                        </button>
+                        <button type="button" style="color:var(--text-muted);font-size:11px;font-weight:700;" onclick="deletePost(${p.id})">
+                            Excluir
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function handleCreatePost(event) {
+            event.preventDefault();
+            const badge = document.getElementById('post-type-select').value;
+            const verse = document.getElementById('post-verse-input').value.trim().toUpperCase();
+            const content = document.getElementById('post-content-input').value.trim();
+            const pin = document.getElementById('post-pin-check').checked;
+            if (!content) return;
+
+            if (pin) {
+                state.pinnedNote = {
+                    visible: true,
+                    author: state.profile.name,
+                    badge,
+                    verse: verse || 'MAD',
+                    text: content
+                };
+            } else {
+                state.posts.unshift({
+                    id: Date.now(),
+                    author: state.profile.name,
+                    badge,
+                    verse: verse || 'MAD',
+                    content,
+                    likes: 1,
+                    liked: true,
+                    time: 'Agora'
+                });
+            }
+
+            saveSafeState();
+            renderPinnedNoteAndFeed();
+            closeModal('modal-new-post');
+            event.target.reset();
+            document.getElementById('post-verse-input').value = 'GÁLATAS 6:9';
+            gainXp(20, 'Publicado no Mural Equipemad!');
+        }
+
+        function togglePostLike(id) {
+            const post = state.posts.find(p => p.id === id);
+            if (!post) return;
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1;
+            saveSafeState();
+            renderMuralFeed();
+        }
+
+        function deletePost(id) {
+            state.posts = state.posts.filter(p => p.id !== id);
+            saveSafeState();
+            renderMuralFeed();
+            showToast('Postagem removida.');
+        }
+
+        /* ==================== AGENDA ==================== */
+        function renderAgenda() {
+            const filtersEl = document.getElementById('agenda-filters');
+            const listEl = document.getElementById('agenda-list');
+            const cats = ['TODOS', 'CULTO', 'ENSAIO', 'CÉLULA'];
+
+            if (filtersEl) {
+                filtersEl.innerHTML = cats.map(c => `
+                    <button type="button" class="chip-btn ${state.agendaFilter === c ? 'active' : ''}" onclick="setAgendaFilter('${c}')">${c}</button>
+                `).join('');
+            }
+
+            if (listEl) {
+                const filtered = state.agendaFilter === 'TODOS'
+                    ? state.events
+                    : state.events.filter(ev => ev.category === state.agendaFilter);
+
+                listEl.innerHTML = filtered.map(ev => `
+                    <article class="card">
+                        <div class="section-head">
+                            <span class="eyebrow">${escapeAttr(ev.category)} • ${escapeAttr(ev.date)} às ${escapeAttr(ev.time)}</span>
+                            <span style="font-size:11px;font-weight:800;color:var(--text-muted);">${ev.attendees} confirmados</span>
+                        </div>
+                        <h3 style="font-size:16px;font-weight:900;margin-top:6px;">${escapeAttr(ev.title)}</h3>
+                        <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">📍 ${escapeAttr(ev.location)}</p>
+                        <button type="button" class="${ev.confirmed ? 'btn-fire' : 'btn-dark'}" style="margin-top:12px;padding:10px 14px;width:100%;" onclick="toggleEventConfirm(${ev.id})">
+                            ${ev.confirmed ? 'PRESENÇA CONFIRMADA ✓' : 'CONFIRMAR PRESENÇA (+15 XP)'}
+                        </button>
+                    </article>
+                `).join('');
+            }
+        }
+
+        function setAgendaFilter(cat) {
+            state.agendaFilter = cat;
+            saveSafeState();
+            renderAgenda();
+        }
+
+        function toggleEventConfirm(id) {
+            const ev = state.events.find(e => e.id === id);
+            if (!ev) return;
+            ev.confirmed = !ev.confirmed;
+            ev.attendees += ev.confirmed ? 1 : -1;
+            saveSafeState();
+            renderAgenda();
+            if (ev.confirmed) {
+                gainXp(15, `Presença em "${ev.title}"`);
+            } else {
+                showToast('Presença desmarcada.');
+            }
+        }
+
+        function handleCreateEvent(event) {
+            event.preventDefault();
+            const title = document.getElementById('event-title-input').value.trim();
+            const date = document.getElementById('event-date-input').value.trim();
+            const time = document.getElementById('event-time-input').value.trim();
+            const category = document.getElementById('event-cat-select').value;
+            const location = document.getElementById('event-loc-input').value.trim() || 'IEQ Jardim Graziela';
+            if (!title || !date || !time) return;
+
+            state.events.unshift({
+                id: Date.now(),
+                title,
+                date,
+                time,
+                category,
+                location,
+                confirmed: true,
+                attendees: 1
+            });
+            saveSafeState();
+            renderAgenda();
+            closeModal('modal-new-event');
+            event.target.reset();
+            gainXp(15, 'Evento adicionado à Agenda MAD!');
+        }
+
+        /* ==================== EQUIPEMAD ==================== */
+        function renderEquipemad() {
+            const membersEl = document.getElementById('team-members-list');
+            const scalesEl = document.getElementById('scales-list');
+
+            if (membersEl) {
+                const displayMembers = state.teamMembers.map((m, i) => i === 0
+                    ? { ...m, name: state.profile.name, role: state.profile.role }
+                    : m
+                );
+                membersEl.innerHTML = displayMembers.map((m, idx) => `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);padding:10px 12px;border-radius:12px;">
+                        <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                            <span class="avatar-frame">${idx === 0 ? getActiveProfileAvatarHtml() : `<span style="font-size:13px;font-weight:900;color:var(--fire-2);">${escapeAttr(m.name.slice(0,2).toUpperCase())}</span>`}</span>
+                            <div style="min-width:0;">
+                                <div style="font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeAttr(m.name)}</div>
+                                <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeAttr(m.role)}</div>
+                            </div>
+                        </div>
+                        <span class="xp-chip">🔥 ${m.streak}d</span>
+                    </div>
+                `).join('');
+            }
+
+            if (scalesEl) {
+                scalesEl.innerHTML = state.scales.map(sc => `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface-2);padding:10px 12px;border-radius:12px;font-size:12px;">
+                        <div>
+                            <strong>${escapeAttr(sc.role)}</strong>
+                            <div style="color:var(--text-muted);font-size:11px;">${escapeAttr(sc.member)}</div>
+                        </div>
+                        <span class="eyebrow">${escapeAttr(sc.status)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        /* ==================== PRAISEMAD ==================== */
+        function renderPraisemad() {
+            const listEl = document.getElementById('songs-list');
+            const q = ((document.getElementById('song-search-input') && document.getElementById('song-search-input').value) || '').trim().toLowerCase();
+            if (!listEl) return;
+
+            const matches = state.songs.filter(s =>
+                s.title.toLowerCase().includes(q) ||
+                s.key.toLowerCase().includes(q) ||
+                s.leader.toLowerCase().includes(q)
+            );
+
+            if (matches.length === 0) {
+                listEl.innerHTML = `<div class="card" style="text-align:center;color:var(--text-muted);font-size:12.5px;">Nenhum louvor encontrado no Praisemad.</div>`;
+                return;
+            }
+
+            listEl.innerHTML = matches.map(s => `
+                <article class="card">
+                    <div class="section-head">
+                        <h3 style="font-size:15px;font-weight:900;">${escapeAttr(s.title)}</h3>
+                        <span class="xp-chip">Tom: ${escapeAttr(s.key)}</span>
+                    </div>
+                    <div class="eyebrow" style="margin-top:4px;">${escapeAttr(s.leader)}</div>
+                    <p style="font-size:12.5px;color:#d4d4d8;margin-top:8px;white-space:pre-line;">${escapeAttr(s.notes)}</p>
+                </article>
+            `).join('');
+        }
+
+        function handleCreateSong(event) {
+            event.preventDefault();
+            const title = document.getElementById('song-title-input').value.trim();
+            const key = document.getElementById('song-key-input').value.trim() || 'G';
+            const leader = document.getElementById('song-leader-input').value.trim() || 'Praisemad';
+            const notes = document.getElementById('song-chords-input').value.trim();
+            if (!title || !notes) return;
+
+            state.songs.unshift({
+                id: Date.now(),
+                title,
+                key,
+                leader,
+                notes
+            });
+            saveSafeState();
+            renderPraisemad();
+            closeModal('modal-new-song');
+            event.target.reset();
+            gainXp(15, 'Louvor adicionado ao Praisemad!');
+        }
+
+        /* ==================== NAVEGAÇÃO ENTRE ABAS ==================== */
+        function switchTab(tabName) {
+            const validTabs = ['mural', 'agenda', 'equipemad', 'praisemad'];
+            const nextTab = validTabs.includes(tabName) ? tabName : 'mural';
+            state.activeTab = nextTab;
+            saveSafeState();
+
+            validTabs.forEach(t => {
+                const panel = document.getElementById(`panel-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if (panel) panel.classList.toggle('active', t === nextTab);
+                if (nav) nav.classList.toggle('active', t === nextTab);
+            });
+
+            const fab = document.getElementById('fab-new-devo');
+            if (fab) fab.classList.toggle('hidden', nextTab !== 'mural');
+        }
+
+        /* ==================== INICIALIZAÇÃO ==================== */
+        (function initEquipemad() {
+            try {
+                renderHeaderAndProfile();
+                renderPassEverywhere();
+                renderWeekAndStreak();
+                renderDevotionalCard();
+                renderPinnedNoteAndFeed();
+                renderAgenda();
+                renderEquipemad();
+                renderPraisemad();
+                switchTab(state.activeTab || 'mural');
+            } catch (err) {
+                console.error('Erro na inicialização do Equipemad:', err);
+                state = getDefaultState();
+                renderHeaderAndProfile();
+                renderPassEverywhere();
+                renderWeekAndStreak();
+                renderDevotionalCard();
+                renderPinnedNoteAndFeed();
+                renderAgenda();
+                renderEquipemad();
+                renderPraisemad();
+                switchTab('mural');
+            }
+        })();
+    </script>
+</body>
+</html>
